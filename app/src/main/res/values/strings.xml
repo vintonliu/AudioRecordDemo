@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AudioRecordDemo</string>
+    <string name="record_title">录音测试</string>
+    <string name="play_title">播放测试</string>
+    <string name="speaker_title">扬声器测试</string>
+    <string name="rec_source">采集源:</string>
+    <string name="audio_rate">采样率:</string>
+    <string name="audio_channel">通道数:</string>
+    <string name="play_stream_type">流类型:</string>
+    <string name="rec_start">录音</string>
+    <string name="rec_stop">停止</string>
+    <string name="play_sample">样音播放</string>
+    <string name="play_start">播放</string>
+    <string name="play_stop">停止</string>
+    <string name="audio_mode">音频模式:</string>
+    <string name="speaker_on">免提开</string>
+    <string name="speaker_off">免提关</string>
+</resources>

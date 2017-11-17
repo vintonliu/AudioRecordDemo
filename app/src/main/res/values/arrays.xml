@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rec_source_entries">
+        <item>DEFAULT</item>
+        <item>MIC</item>
+        <item>VOICE_CALL</item>
+        <item>VOICE_COMMUNICATION</item>
+    </string-array>
+
+    <string-array name="rec_channel_entries">
+        <item>CHANNEL_CONFIGURATION_MONO</item>
+        <item>CHANNEL_IN_MONO</item>
+    </string-array>
+
+    <string-array name="play_stream_type_entries">
+        <item>STREAM_SYSTEM</item>
+        <item>STREAM_VOICE_CALL</item>
+        <item>STREAM_MUSIC</item>
+    </string-array>
+
+    <string-array name="play_channel_entries">
+        <item>CHANNEL_CONFIGURATION_MONO</item>
+        <item>CHANNEL_OUT_MONO</item>
+    </string-array>
+
+    <string-array name="audio_sample_entries">
+        <item>8000</item>
+        <item>16000</item>
+        <item>44100</item>
+    </string-array>
+
+    <string-array name="audio_mode_entries">
+        <item>MODE_NORMAL</item>
+        <item>MODE_IN_CALL</item>
+        <item>MODE_IN_COMMUNICATION</item>
+    </string-array>
+</resources>
