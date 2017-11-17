@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 
         mContext = this;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
@@ -307,8 +308,10 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
                 mAudioManager.setMode(mode);
                 if (mAudioManager.getMode() != mode) {
-                    tv_audio_state.setText("模式设置失败, 可能不支持此模式");
+                    tv_audio_state.setText("模式设置失败, 可能不支持此模式.");
                     mAudioManager.setMode(defmode);
+                } else {
+                    tv_audio_state.setText("模式设置成功.");
                 }
                 mAudioManager.setSpeakerphoneOn(true);
             }
