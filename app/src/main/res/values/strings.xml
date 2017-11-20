@@ -10,7 +10,7 @@
     <string name="rec_start">录音</string>
     <string name="rec_stop">停止</string>
     <string name="play_sample">样音播放</string>
-    <string name="play_start">播放</string>
+    <string name="play_start">录音播放</string>
     <string name="play_stop">停止</string>
     <string name="audio_mode">音频模式:</string>
     <string name="speaker_on">免提开</string>

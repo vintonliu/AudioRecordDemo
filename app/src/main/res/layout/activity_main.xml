@@ -166,7 +166,7 @@
 
             <Button
                 android:id="@+id/btn_play_start"
-                android:layout_width="80dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/play_start"/>
 
