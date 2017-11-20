@@ -191,7 +191,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     }
 
     /* (non-Javadoc)
-     * @see com.gl.softphone.EasyPermissions.PermissionCallbacks#onPermissionsGranted(int, java.util.List)
+     * @see cn.freedom.audiorecorddemo.EasyPermissions.PermissionCallbacks#onPermissionsGranted(int, java.util.List)
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     }
 
     /* (non-Javadoc)
-	 * @see com.gl.softphone.EasyPermissions.PermissionCallbacks#onPermissionsDenied(int, java.util.List)
+	 * @see cn.freedom.audiorecorddemo.EasyPermissions.PermissionCallbacks#onPermissionsDenied(int, java.util.List)
 	 */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
