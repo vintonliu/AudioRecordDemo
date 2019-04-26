@@ -5,6 +5,7 @@
         <item>MIC</item>
         <item>VOICE_CALL</item>
         <item>VOICE_COMMUNICATION</item>
+        <item>CAMCORDER</item>
     </string-array>
 
     <string-array name="rec_channel_entries">

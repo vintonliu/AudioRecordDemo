@@ -227,6 +227,8 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     parameters.source = MediaRecorder.AudioSource.VOICE_CALL;
                 } else if (strSource.equals("VOICE_COMMUNICATION")) {
                     parameters.source = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
+                } else if (strSource.equals("CAMCORDER")) {
+                    parameters.source = MediaRecorder.AudioSource.CAMCORDER;
                 } else {
                     parameters.source = MediaRecorder.AudioSource.DEFAULT;
                 }
