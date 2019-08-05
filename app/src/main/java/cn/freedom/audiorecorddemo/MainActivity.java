@@ -9,6 +9,7 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,6 +50,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     Spinner spn_audio_mode = null;
 
     TextView tv_audio_state = null;
+    TextView tv_device_info = null;
 
     ArrayAdapter<CharSequence> mRecSrcAdapter = null;
     ArrayAdapter<CharSequence> mRecRateAdapter = null;
@@ -74,7 +77,20 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         mContext = this;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
+
         tv_audio_state = (TextView) findViewById(R.id.tv_audio_state);
+        tv_device_info = (TextView) findViewById(R.id.tv_device_info);
+        String deviceInfo = "Android SDK: " + Build.VERSION.SDK_INT + ", "
+                            + "Release: " + Build.VERSION.RELEASE + ", "
+                            + "Brand: " + Build.BRAND + ", "
+                            + "Device: " + Build.DEVICE + ", "
+                            + "Id: " + Build.ID + ", "
+                            + "Hardware: " + Build.HARDWARE + ", "
+                            + "Manufacturer: " + Build.MANUFACTURER + ", "
+                            + "Model: " + Build.MODEL + ", "
+                            + "Product: " + Build.PRODUCT;
+        tv_device_info.setText(deviceInfo);
+
 
         btn_rec_start = (Button) findViewById(R.id.btn_rec_start);
         btn_rec_start.setOnClickListener(this);
@@ -236,6 +252,10 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 String strChannels = spn_rec_channel.getSelectedItem().toString();
                 if (strChannels.equals("CHANNEL_CONFIGURATION_MONO")) {
                     parameters.channels = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+                } else if (strChannels.equals("CHANNEL_CONFIGURATION_STEREO")) {
+                    parameters.channels = AudioFormat.CHANNEL_CONFIGURATION_STEREO;
+                } else if (strChannels.equals("CHANNEL_IN_STEREO")) {
+                    parameters.channels = AudioFormat.CHANNEL_IN_STEREO;
                 } else {
                     parameters.channels = AudioFormat.CHANNEL_IN_MONO;
                 }
@@ -271,6 +291,10 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 String strChannels = spn_play_channel.getSelectedItem().toString();
                 if (strChannels.equals("CHANNEL_CONFIGURATION_MONO")) {
                     parameters.channels = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+                } else if (strChannels.equals("CHANNEL_CONFIGURATION_STEREO")) {
+                    parameters.channels = AudioFormat.CHANNEL_CONFIGURATION_STEREO;
+                } else if (strChannels.equals("CHANNEL_OUT_STEREO")) {
+                    parameters.channels = AudioFormat.CHANNEL_OUT_STEREO;
                 } else {
                     parameters.channels = AudioFormat.CHANNEL_OUT_MONO;
                 }
@@ -397,6 +421,19 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             // 开始录制
             try {
                 audioRecord.startRecording();
+
+                final AudioRecord tmpRecord = audioRecord;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mContext, "AudioRecord "
+                                + "session ID: " + tmpRecord.getAudioSessionId() + ", "
+                                + "audio format: " + tmpRecord.getAudioFormat() + ", "
+                                + "channels: " + tmpRecord.getChannelCount() + ", "
+                                + "sample rate: " + tmpRecord.getSampleRate(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -530,6 +567,19 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
             // 开始播放
             try {
                 audioTrack.play();
+
+                final AudioTrack tmpTrack = audioTrack;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mContext, "AudioTrack "
+                                + "session ID: " + tmpTrack.getAudioSessionId() + ", "
+                                + "audio format: " + tmpTrack.getAudioFormat() + ", "
+                                + "channels: " + tmpTrack.getChannelCount() + ", "
+                                + "sample rate: " + tmpTrack.getSampleRate(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }

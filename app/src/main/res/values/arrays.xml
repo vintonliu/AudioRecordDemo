@@ -10,7 +10,9 @@
 
     <string-array name="rec_channel_entries">
         <item>CHANNEL_CONFIGURATION_MONO</item>
+        <item>CHANNEL_CONFIGURATION_STEREO</item>
         <item>CHANNEL_IN_MONO</item>
+        <item>CHANNEL_IN_STEREO</item>
     </string-array>
 
     <string-array name="play_stream_type_entries">
@@ -21,13 +23,16 @@
 
     <string-array name="play_channel_entries">
         <item>CHANNEL_CONFIGURATION_MONO</item>
+        <item>CHANNEL_CONFIGURATION_STEREO</item>
         <item>CHANNEL_OUT_MONO</item>
+        <item>CHANNEL_OUT_STEREO</item>
     </string-array>
 
     <string-array name="audio_sample_entries">
         <item>8000</item>
         <item>16000</item>
         <item>44100</item>
+        <item>48000</item>
     </string-array>
 
     <string-array name="audio_mode_entries">
