@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 R.array.rec_channel_entries,
                 android.R.layout.simple_spinner_item);
         spn_rec_channel.setAdapter(mRecChnlAdapter);
-        spn_rec_channel.setSelection(1);
+        spn_rec_channel.setSelection(2);
 
         spn_play_stream = (Spinner) findViewById(R.id.spn_play_stream);
         mPlayTypeAdapter = ArrayAdapter.createFromResource(this,
@@ -152,7 +152,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 R.array.play_channel_entries,
                 android.R.layout.simple_spinner_item);
         spn_play_channel.setAdapter(mPlayChnlAdapter);
-        spn_play_channel.setSelection(1);
+        spn_play_channel.setSelection(2);
 
         spn_audio_mode = (Spinner) findViewById(R.id.spn_audio_mode);
         mAudioModeAdapter = ArrayAdapter.createFromResource(this,
