@@ -10,10 +10,28 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+//        debug {
+//            storeFile file('../key/debug_demo.jks')
+//            storePassword '123456'
+//            keyAlias 'audio_demo'
+//            keyPassword '123456'
+//        }
+        release {
+//            storeFile file('../key/release_demo.jks')
+//            storePassword '123456'
+//            keyAlias 'release_demo'
+//            keyPassword '123456'
+            setSigningProperties()
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -28,4 +46,27 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:26.1.0'
+}
+
+def setSigningProperties() {
+    def proFile = file('../keystore.properties')
+    if (proFile.canRead()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(proFile))
+        if (props != null &&
+                props.containsKey('RELEASE_STORE_FILE') &&
+                props.containsKey('RELEASE_KEY_ALIAS') &&
+                props.containsKey('RELEASE_STORE_PASSWORD') &&
+                props.containsKey('RELEASE_KEY_PASSWORD')) {
+
+            android.signingConfigs.release.storeFile = file(props['RELEASE_STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['RELEASE_STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['RELEASE_KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['RELEASE_KEY_PASSWORD']
+        } else {
+            throw new Exception("some key missing.")
+        }
+    } else {
+        throw new Exception("keystore.properties not found:" + propFile.absolutePath)
+    }
 }
