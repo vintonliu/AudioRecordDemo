@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -62,7 +63,6 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
     static Context mContext = null;
 
-    private PowerManager.WakeLock mWakeLock = null;
     private AudioManager mAudioManager = null;
 
     private boolean isRecording = false;
@@ -73,6 +73,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mContext = this;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
@@ -263,7 +264,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 parameters.sampleRate = Integer.parseInt(spn_rec_rate.getSelectedItem().toString());
 
                 isRecording = true;
-                recordTask.execute(parameters);
+                recordTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, parameters);
             }
             break;
 
@@ -309,7 +310,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 }
 
                 isPlaying = true;
-                playTask.execute(parameters);
+                playTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, parameters);
             }
             break;
 
@@ -374,28 +375,22 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.i(TAG, "onPreExecute()");
+            Log.i(TAG, "RecordTask.onPreExecute()");
             btn_rec_start.setEnabled(false);
             btn_rec_stop.setEnabled(true);
-            btn_play_stop.setEnabled(false);
-            btn_play_start.setEnabled(false);
-            btn_play_sample.setEnabled(false);
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
             super.onPostExecute(aLong);
-            Log.i(TAG, "onPostExecute()");
+            Log.i(TAG, "RecordTask.onPostExecute()");
             btn_rec_start.setEnabled(true);
             btn_rec_stop.setEnabled(true);
-            btn_play_stop.setEnabled(true);
-            btn_play_start.setEnabled(true);
-            btn_play_sample.setEnabled(true);
         }
 
         @Override
         protected Long doInBackground(Parameters... params) {
-            Log.i(TAG, "doInBackground()");
+            Log.i(TAG, "RecordTask.doInBackground()");
 
             RecordTask.Parameters param = params[0];
 
@@ -405,8 +400,9 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                     AudioFormat.ENCODING_PCM_16BIT);
 
             bufferSize *= 2;
-            AudioRecord audioRecord = null;
+            Log.i(TAG, "RecordTask.AudioRecord bufferSize = " + bufferSize);
 
+            AudioRecord audioRecord = null;
             try {
                 // 实例化AudioRecord
                 audioRecord = new AudioRecord(param.source,
@@ -416,6 +412,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                                                     bufferSize);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
+                return null;
             }
 
             // 开始录制
@@ -453,7 +450,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                 while (isRecording) {
                     bytesRead = audioRecord.read(tempBuf, 0, bytesPer10ms);
                     // 循环将buffer中的音频数据写入到OutputStream中
-                    if (fosRecord != null) {
+                    if (fosRecord != null && bytesRead == bytesPer10ms) {
                         try {
                             fosRecord.write(tempBuf, 0, bytesRead);
                         } catch (IOException e) {
@@ -493,9 +490,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.i(TAG, "onPreExecute()");
-            btn_rec_start.setEnabled(false);
-            btn_rec_stop.setEnabled(false);
+            Log.i(TAG, "PlayTask.onPreExecute()");
             btn_play_stop.setEnabled(true);
             btn_play_start.setEnabled(false);
             btn_play_sample.setEnabled(false);
@@ -504,9 +499,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
         @Override
         protected void onPostExecute(Long aLong) {
             super.onPostExecute(aLong);
-            Log.i(TAG, "onPostExecute()");
-            btn_rec_start.setEnabled(true);
-            btn_rec_stop.setEnabled(true);
+            Log.i(TAG, "PlayTask.onPostExecute()");
             btn_play_stop.setEnabled(true);
             btn_play_start.setEnabled(true);
             btn_play_sample.setEnabled(true);
@@ -514,7 +507,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
 
         @Override
         protected Long doInBackground(Parameters... params) {
-            Log.i(TAG, "doInBackground()");
+            Log.i(TAG, "PlayTask.doInBackground()");
             Parameters param = params[0];
             int sampleRate;
             if (param.isSample) {
@@ -537,6 +530,7 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
                         AudioTrack.MODE_STREAM);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
+                return null;
             }
 
             // 定义输入流，将音频写入到AudioTrack类中，实现播放
@@ -631,16 +625,10 @@ public class MainActivity extends Activity implements EasyPermissions.Permission
     protected void onResume() {
         super.onResume();
         PowerManager pManager = ((PowerManager) getSystemService(POWER_SERVICE));
-        mWakeLock = pManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                | PowerManager.ON_AFTER_RELEASE, "unlock");
-        mWakeLock.acquire();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (null != mWakeLock) {
-            mWakeLock.release();
-        }
     }
 }
